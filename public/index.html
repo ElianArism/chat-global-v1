@@ -64,5 +64,28 @@
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      const input = document.getElementById("input");
+      const form = document.getElementById("form");
+      const msgList = document.getElementById("messages");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const value = input.value;
+        socket.emit("to-sv-message", value);
+        input.value = "";
+      });
+
+      socket.on("to-client-message", (msg) => {
+        const li = document.createElement("li");
+        li.textContent = msg;
+        msgList.appendChild(li);
+      });
+    </script>
   </body>
 </html>
